@@ -1,13 +1,14 @@
-import React from 'react';
+import React, {useState} from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.bundle.js';
 import styled from '@emotion/styled';
 
 import logo from '../../../assets/image/logo.jpg';
-import {giraffes, aviarys} from '../utils/giraffes';
+import {giraffes, aviarys, updates, configuration} from '../utils/giraffes';
 import {NoticeIcon, PlusIcon} from '../utils/icons';
 import {GiraffeCard} from '../components/GiraffeCard';
 import {ProgressBlock} from '../components/ProgressBlock';
+import {Updates} from '../components/Updates';
 
 const Header = styled.div`
     
@@ -144,21 +145,16 @@ const GiraffeList = styled.div`
     justify-content: flex-start;
     max-width: 3000px;
 `;
-const Updates = styled.div`
-    position: absolute;
-    bottom: 10px;
-    max-width: 506px;
-    width: 100%;
-    max-height: 287px;
-    height: 100%;
-    background: #FFFFFF;
-    box-shadow: 0px 4px 15px #869CB0;
-    border-radius: 28px;
-`;
-
 
 export const GiraffesScreen = () => {
-
+    const tableField = [
+        {name: 'Дата', key: 'date'},
+        {name: 'Действие', key: 'action'},
+        {name: 'Жираф', key: 'giraffeId'},
+        {name: 'Статус', key: 'status'},
+    ];
+    const [visibleUpdates, setIsVisibleUpdates] = useState(false);
+    const [visibleProgress, setIsVisibleProgress] = useState(true);
     return (
         <div>
             <Header>
@@ -182,27 +178,38 @@ export const GiraffesScreen = () => {
 
             <Title>Жирафы <AddGiraffe>{PlusIcon}</AddGiraffe></Title>
             <div className="tab-content" id="myTabContent">
-                {aviarys.map((aviary, i) =>
-                    <div className={"tab-pane fade" + (i === 0 ? ' show active' : '')} key={"content-" + aviary.id}
-                         id={"nav-" + aviary.id}
-                         role="tabpanel" aria-labelledby={"link-" + aviary.id}>
-                        <GiraffeWrapper>
-                            <GiraffeList>
-                                {giraffes
-                                    .filter(giraffe => giraffe.aviary === aviary.id)
-                                    .map((giraffe, i) =>
+                {aviarys.map((aviary, i) => {
+                        const filtederGiraffes = giraffes.filter(giraffe => giraffe.aviary === aviary.id);
+                        const percent = Math.floor(filtederGiraffes.length / configuration.avairySize * 100);
+                        return <div className={"tab-pane fade" + (i === 0 ? ' show active' : '')}
+                                    key={"content-" + aviary.id}
+                                    id={"nav-" + aviary.id}
+                                    role="tabpanel" aria-labelledby={"link-" + aviary.id}>
+                            <GiraffeWrapper>
+                                <GiraffeList>
+                                    {filtederGiraffes.map((giraffe, i) =>
                                         <GiraffeCard key={"giraffe-" + giraffe.id} giraffe={giraffe}/>
                                     )}
-                            </GiraffeList>
-                        </GiraffeWrapper>
-
-                    </div>
+                                </GiraffeList>
+                            </GiraffeWrapper>
+                            {visibleProgress &&
+                            <ProgressBlock percent={percent} title={'Заполнение вольера'} button={'Информация'}
+                                           handleClick={() => {
+                                               setIsVisibleUpdates(true)
+                                           }} visibleFunction={() => {
+                                setIsVisibleProgress(false)
+                            }}/>
+                            }
+                            {visibleUpdates && <Updates title={'Обновления'} headers={tableField}
+                                                        data={updates.filter(update => update.avairysId === aviary.id)}
+                                                        visibleFunction={() => {
+                                                            setIsVisibleUpdates(false)
+                                                        }}/>
+                            }
+                        </div>
+                    }
                 )}
             </div>
-            <ProgressBlock percent={50} title={'Заполнение вольера'} button={'Информация'} onclick={null} />
-            <Updates>
-
-            </Updates>
         </div>
     )
 };

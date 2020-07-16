@@ -5,22 +5,18 @@ import styled from '@emotion/styled';
 
 import { CloseIcon} from "@/client/main/utils/icons";
 
-const ProgressWrapper = styled.div((props => ({
-    display:
-        props.visible === 1
-            ? 'block'
-            : 'none',
-    position: 'absolute',
-    bottom: '-60px',
-    right: '40px',
-    maxWidth: '506px',
-    width: '100%',
-    height: '217px',
-    padding: '21px',
-    background: '#668663',
-    borderRadius: '28px',
-    color: '#fff',
-})));
+const ProgressWrapper = styled.div`
+    position: absolute;
+    bottom: -60px;
+    right: 40px;
+    max-width: 506px;
+    width: 100%;
+    height: 217px;
+    padding: 21px;
+    background: #668663;
+    border-radius: 28px;
+    color:#fff;
+`;
 
 const Close = styled.div`
     position: absolute;
@@ -65,13 +61,17 @@ const Button = styled.button`
     border-radius: 35px;
     border: none;
     color: #fff;
+    
+        &:focus{
+            outline: 0;
+            border: none;
+        }
 `;
 
 export const ProgressBlock = (props) => {
-    const [isVisible, setIsVisible ] = useState(1);
     return (
-        <ProgressWrapper visible={isVisible}>
-            <Close onClick={() => setIsVisible(0)}>
+        <ProgressWrapper>
+            <Close onClick={props.visibleFunction}>
                 {CloseIcon}
             </Close>
             <Title>
@@ -84,7 +84,7 @@ export const ProgressBlock = (props) => {
                          aria-valuemin="0"
                          aria-valuemax="100"/>
                 </Progress>
-                <Button onClick={props.onclick}>{props.button}</Button>
+                <Button onClick={props.handleClick}>{props.button}</Button>
             </div>
         </ProgressWrapper>
     );

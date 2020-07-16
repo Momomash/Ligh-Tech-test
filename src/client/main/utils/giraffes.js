@@ -98,11 +98,9 @@ export let aviarys = [
     }
 ];
 
-export let configuration = [
-    {
-        avairySize: 10,
-    }
-];
+export let configuration = {
+    avairySize: 10,
+};
 
 const actions = {
     newGiraffe: 'Новый жираф',
@@ -110,7 +108,7 @@ const actions = {
     delete: 'Удалить',
     transfer: 'Перевод',
 };
-const statuses ={
+export const statuses = {
     expected: 'Ожидается',
     performed: 'Выполнено',
     unConfirmed: 'Не подтверждено',
@@ -121,42 +119,42 @@ const statuses ={
 export let updates = [
     {
         date: '01 июня 2020',
-        acton: actions.newGiraffe,
+        action: actions.newGiraffe,
         giraffeId: 1,
         status: statuses.rejected,
         avairysId: 1,
     },
     {
         date: '20 апр 2020',
-        acton: actions.newGiraffe,
+        action: actions.newGiraffe,
         giraffeId: 2,
         status: statuses.performed,
         avairysId: 1,
     },
     {
         date: '15 апр 2020',
-        acton: actions.edit,
+        action: actions.edit,
         giraffeId: 4,
         status: statuses.unConfirmed,
         avairysId: 1,
     },
     {
         date: '05 апр 2020',
-        acton: actions.delete,
+        action: actions.delete,
         giraffeId: 3,
         status: statuses.performed,
         avairysId: 1,
     },
     {
         date: '12 июн 2020',
-        acton: actions.newGiraffe,
-        giraffeId: 6 ,
+        action: actions.newGiraffe,
+        giraffeId: 6,
         status: statuses.performed,
         avairysId: 2,
     },
     {
         date: '10 июл 2020 ',
-        acton: actions.edit,
+        action: actions.edit,
         giraffeId: 7,
         status: statuses.expected,
         avairysId: 3,
