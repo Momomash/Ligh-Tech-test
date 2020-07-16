@@ -60,6 +60,7 @@ module.exports = {
     resolve: {
         alias: {
             'react-dom': '@hot-loader/react-dom',
+            '@': path.resolve(__dirname, 'src'),
         },
         extensions: ['.js', '.jsx']
     },
@@ -68,7 +69,7 @@ module.exports = {
             test: /\.jsx?$/,
             exclude: /node_modules/,
             use: [
-                // 'cache-loader' , 
+                // 'cache-loader' ,
                 {
                     loader: 'babel-loader',
                     options: {
@@ -96,7 +97,7 @@ module.exports = {
     },
     plugins: [
         // new CleanWebpackPlugin(),
-        
+
         new webpack.HotModuleReplacementPlugin(),
         ...htmlArray,
     ]

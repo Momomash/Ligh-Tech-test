@@ -1,14 +1,31 @@
-import React, { Suspense, useState } from 'react';
-import { hot } from 'react-hot-loader/root';
-import UploadExample from './uploadExample';
+import React from 'react';
+import {hot} from 'react-hot-loader/root';
+import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom';
+import {NotFoundScreen, GiraffesScreen, ControlScreen, EmployeesScreen, SettingsScreen, SupportScreen, HomeScreen} from '../screens'
+import {WrapperApp} from '../components/BaseComponents'
+import '../../../assets/css/style.css';
+
 
 function App() {
-    
     return (
-        <div>
-            <h1 style={{ textAlign: 'center', textTransform: 'uppercase' }}>Let's start dev</h1>
-            <UploadExample/>
-        </div>
+
+        <Router>
+            <WrapperApp>
+
+            <Switch>
+                <Route path="/" component={HomeScreen} exact/>
+                <Route path="/control" component={ControlScreen}/>
+                <Route path="/employees" component={EmployeesScreen}/>
+                <Route path="/giraffes" component={GiraffesScreen}/>
+                <Route path="/settings" component={SettingsScreen}/>
+                <Route path="/support" component={SupportScreen}/>
+                <Route path="*">
+                    <NotFoundScreen/>
+                </Route>
+            </Switch>
+                </WrapperApp>
+        </Router>
+
     )
 }
 
