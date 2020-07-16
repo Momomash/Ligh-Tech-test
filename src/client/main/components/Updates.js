@@ -6,7 +6,7 @@ import {giraffes, statuses} from "@/client/main/utils/giraffes";
 
 const UpdatesWrapper = styled.div`
     position: absolute;
-    bottom: 10px;
+    bottom: -40px;
     max-width: 506px;
     width: 100%;
     max-height: 287px;
@@ -15,6 +15,10 @@ const UpdatesWrapper = styled.div`
     background: #FFFFFF;
     box-shadow: 0px 4px 15px #869CB0;
     border-radius: 28px;
+    
+    @media screen and (max-width: 600px){
+        left: 0;
+    }
 `;
 
 const Close = styled.div`
@@ -50,8 +54,26 @@ const Title = styled.p`
     }
 `;
 const Table = styled.table`
+    thead, tbody {
+     display: block; 
+     }
+    tbody {
+        height: 100px;      
+        overflow-y: auto;   
+        overflow-x: hidden;  
+        
+        &::-webkit-scrollbar {
+            display:none;
+        }
+    }
+    tr{
+        width: 100%;
+        display: block;
+    }
     th{
         padding: 0 0 4px 0;
+        width: 25%;
+        display: inline-block;
         border-top: none;
         font-size: 12px;
         font-weight: normal;
@@ -59,13 +81,15 @@ const Table = styled.table`
         color: #B4B4B4;
     }
     td{
+        width: 25%;
+        display: inline-block;
         padding: 7px 0;
         font-size: 12px;
         color: #435F40;
     }
 `;
 const colorTag = css`
-    padding: 6px 9px;
+    padding: 6px 4px;
     border-radius: 5px;
     color: #8B8B8B;
 `;

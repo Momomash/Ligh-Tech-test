@@ -32,6 +32,17 @@ const Tabs = styled.ul`
                 }
             }
      }
+     @media screen and (max-width: 450px){
+        padding-bottom: 10px;
+        flex-direction: column-reverse;
+        align-items: flex-end;
+        .nav-item a{
+            padding: 5px 0 !important;
+        }
+        .nav-item a.active{
+            border-bottom: none !important;
+        }
+     }
 `;
 const UserDiv = styled.div`
     display: flex;
@@ -100,6 +111,11 @@ const AddAviary = styled.button`
             height: 10px;
             
         }
+    @media screen and (max-width: 450px){
+        position: absolute;
+        top: 50px;
+        right: 100px;        
+    }   
     
 `;
 const Title = styled.div`

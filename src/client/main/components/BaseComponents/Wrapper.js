@@ -20,6 +20,9 @@ const MainBlock = styled.div`
     padding: 17px 40px 40px 50px;
     flex-basis: 100%;
     overflow: hidden;
+    @media screen and (max-width: 450px){
+        padding: 9px 20px 20px 25px;
+    }
 `;
 
 function WrapperApp(props) {

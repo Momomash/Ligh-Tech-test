@@ -1,17 +1,30 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styled from '@emotion/styled';
 import {NavLink} from "react-router-dom";
-import { HomeIcon, ControlIcon, GiraffesIcon, EmployeesIcon, SettingsIcon, SupportIcon } from '../../utils';
+import {HomeIcon, ControlIcon, GiraffesIcon, EmployeesIcon, SettingsIcon, SupportIcon, BurgerIcon} from '../../utils';
 import logo from '../../../../assets/image/logo.jpg';
 
 const SidebarWrapper = styled.div`
+    z-index: 3;
     padding: 20px;
     flex: 0 0 277px;
+    background: #668663;
+    @media screen and (max-width: 990px){
+        position: absolute;
+        z-index: 2;
+        height: 100%;
+        left: -257px;
+        transition-duration: 0.4s;
+        &.open{
+            left: 0;
+        }
+    }
 `;
 const LogoBlock = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
+    position: relative;
     margin-bottom: 70px;
     color: #fff;
     font-size: 10px;
@@ -71,13 +84,36 @@ const Menu = styled.div`
         }
     };
 `;
+const ToggleButton = styled.div`
+    display: none;
+    position: absolute;
+    z-index: -1;
+    right: -70px;
+
+    justify-content: flex-end;
+    padding: 10px 14px;
+    width: 50px;
+    border-top-right-radius: 35px;
+    border-bottom-right-radius: 35px;
+    background: #435F40;
+    svg{
+        fill: #F3DBC7;
+    }
+    @media screen and (max-width: 990px){
+        display: flex;
+    }
+`;
 
 
 const Sidebar = () => {
+    const [mobileVisible, setmobileVisible] = useState(false);
     return (
-        <SidebarWrapper>
+        <SidebarWrapper mobileVisible={mobileVisible} className={mobileVisible ? 'open': ''}>
             <LogoBlock>
-                <Icon />
+                <ToggleButton onClick={() => {setmobileVisible(!mobileVisible)}}>
+                    {BurgerIcon}
+                </ToggleButton>
+                <Icon/>
                 <div>
                     <b>Ферма Заслуженных Жирафов</b>
                     <p>России и СНГ</p>
@@ -105,7 +141,7 @@ const Sidebar = () => {
                     Настройки
                 </NavLink>
                 <NavLink exact to="/support" activeClassName="active">
-                    { SupportIcon }
+                    {SupportIcon}
                     Поддержка
                 </NavLink>
             </Menu>

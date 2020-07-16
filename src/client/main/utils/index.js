@@ -12,6 +12,7 @@ import {WeightIcon} from "./icons";
 import {HeightIcon} from "./icons";
 import {EditIcon} from "./icons";
 import {DeleteIcon} from "./icons";
+import {BurgerIcon} from "./icons";
 
 
 export {
@@ -28,5 +29,6 @@ export {
     WeightIcon,
     HeightIcon,
     EditIcon,
-    DeleteIcon
+    DeleteIcon,
+    BurgerIcon
 };

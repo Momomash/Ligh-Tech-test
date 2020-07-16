@@ -18,6 +18,7 @@ const CardWrapper = styled.div`
     display: flex;
     flex-direction: column;
     width: 236px;
+    min-width: 236px;
     height: 495px;
     padding: 14px 23px;
     background: #F3DBC7;

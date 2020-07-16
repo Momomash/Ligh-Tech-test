@@ -125,6 +125,27 @@ export let updates = [
         avairysId: 1,
     },
     {
+        date: '01 июня 2020',
+        action: actions.newGiraffe,
+        giraffeId: 1,
+        status: statuses.rejected,
+        avairysId: 1,
+    },
+    {
+        date: '01 июня 2020',
+        action: actions.newGiraffe,
+        giraffeId: 1,
+        status: statuses.rejected,
+        avairysId: 1,
+    },
+    {
+        date: '01 июня 2020',
+        action: actions.newGiraffe,
+        giraffeId: 1,
+        status: statuses.rejected,
+        avairysId: 1,
+    },
+    {
         date: '20 апр 2020',
         action: actions.newGiraffe,
         giraffeId: 2,

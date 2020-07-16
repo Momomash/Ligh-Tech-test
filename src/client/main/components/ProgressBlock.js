@@ -16,6 +16,12 @@ const ProgressWrapper = styled.div`
     background: #668663;
     border-radius: 28px;
     color:#fff;
+    @media screen and (max-width: 600px){
+        position: relative;
+        margin-top: 30px;
+        bottom: 0;
+        right: 0;
+    }
 `;
 
 const Close = styled.div`
