@@ -1,10 +1,8 @@
 import React, {useState} from 'react';
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap/dist/js/bootstrap.bundle.js';
 import styled from '@emotion/styled';
 import {connect} from "react-redux";
 
-import logo from '../../../assets/image/logo.jpg';
+import logo from '@/assets/image/logo.jpg';
 import {configuration} from '../utils/constans';
 import {NoticeIcon, PlusIcon} from '../utils/icons';
 import GiraffeCard from '../components/GiraffeCard';
@@ -19,7 +17,6 @@ const Tabs = styled.ul`
         display: flex;
         align-items: flex-end;
         margin-bottom: -10px !important;
-        
             a{
                 padding: 0 10px 10px 10px;
                 color: #D9D9D9;
@@ -48,7 +45,6 @@ const UserDiv = styled.div`
     flex-direction: row;
     align-items: center;
     margin-left: auto;
-    
         .notice{
             margin-right: 24px;
             svg{
@@ -118,7 +114,6 @@ const AddAviary = styled.button`
         top: 50px;
         right: 100px;        
     }   
-    
 `;
 const Title = styled.div`
     display: flex;
@@ -151,8 +146,7 @@ const AddGiraffe = styled.button`
         svg{
             fill: #fff;
             width: 16px;
-            height: 16px;
-            
+            height: 16px;  
         }
 `;
 const GiraffeWrapper = styled.div`
@@ -171,20 +165,21 @@ const GiraffeList = styled.div`
 
 export const GiraffesScreen = (props) => {
     const {giraffes, aviarys, updates, newAviary, deleteGiraffe} = props;
-    const tableField = [
-        {name: 'Дата', key: 'date'},
-        {name: 'Действие', key: 'action'},
-        {name: 'Жираф', key: 'giraffeId'},
-        {name: 'Статус', key: 'status'},
-    ];
     const [visibleUpdates, setIsVisibleUpdates] = useState(false);
     const [visibleProgress, setIsVisibleProgress] = useState(true);
+    const [displayNewCard, setDisplayNewCard] = useState(aviarys.map(() => false));
+
+    const changeDisplayCard = (i, state) => {
+        const newCards = displayNewCard.slice();
+        newCards[i] = state;
+        setDisplayNewCard(newCards)
+    };
     return (
         <>
             <div>
                 <Tabs className="nav nav-tabs" id="myTab" role="tablist">
-                    {aviarys.map((aviary, i) => <li className="nav-item" role="presentation" key={aviary.id}>
-                            <a className={"nav-link" + (i === 0 ? ' active' : '')} id={"link-" + aviary.id}
+                    {aviarys.map((aviary, i) => <li className="nav-item" role="presentation" key={'tab-' + aviary.id}>
+                            <a className={"nav-link" + (!i ? ' active' : '')} id={"link-" + aviary.id}
                                data-toggle="tab" href={"#nav-" + aviary.id}
                                role="tab" aria-controls={"#nav-" + aviary.id} aria-selected="false">Вольер {aviary.id}</a>
                         </li>
@@ -199,37 +194,55 @@ export const GiraffesScreen = (props) => {
                     </UserDiv>
                 </Tabs>
             </div>
-            <Title>Жирафы <AddGiraffe >{PlusIcon}</AddGiraffe></Title>
             <div className="tab-content" id="myTabContent">
                 {aviarys.map((aviary, i) => {
                         const filtederGiraffes = giraffes.filter(giraffe => giraffe.aviary === aviary.id);
                         const percent = Math.floor(filtederGiraffes.length / configuration.avairySize * 100);
-                        return <div className={"tab-pane fade" + (i === 0 ? ' show active' : '')}
-                                    key={"content-" + aviary.id}
-                                    id={"nav-" + aviary.id}
-                                    role="tabpanel" aria-labelledby={"link-" + aviary.id}>
-                            <GiraffeWrapper>
-                                <GiraffeList>
-                                    {filtederGiraffes.map((giraffe) =>
-                                        <GiraffeCard deleteFunction={() => deleteGiraffe(giraffe.id)} key={"giraffe-" + giraffe.id} giraffe={giraffe}/>
-                                    )}
-                                </GiraffeList>
-                            </GiraffeWrapper>
-                            {visibleProgress &&
-                            <ProgressBlock percent={percent} title={'Заполнение вольера'} button={'Информация'}
-                                           handleClick={() => {
-                                               setIsVisibleUpdates(true)
-                                           }} visibleFunction={() => {
-                                setIsVisibleProgress(false)
-                            }}/>
-                            }
-                            {visibleUpdates && <Updates title={'Обновления'} headers={tableField}
-                                                        data={updates.filter(update => update.avairysId === aviary.id)}
-                                                        visibleFunction={() => {
-                                                            setIsVisibleUpdates(false)
-                                                        }}/>
-                            }
-                        </div>
+                        return <React.Fragment key={"content-" + aviary.id}>
+                            <div className={"tab-pane fade" + (!i ? ' show active' : '')}
+                                 id={"nav-" + aviary.id}
+                                 role="tabpanel" aria-labelledby={"link-" + aviary.id}>
+                                <Title>Жирафы
+                                    <AddGiraffe onClick={() => changeDisplayCard(i, true)}>
+                                        {PlusIcon}
+                                    </AddGiraffe>
+                                </Title>
+                                <GiraffeWrapper>
+                                    <GiraffeList>
+                                        {displayNewCard[i] &&
+                                        <GiraffeCard deleteFunction={() => changeDisplayCard(i, false)} isNewGiraffe={true}
+                                                     key={"giraffe-" + giraffes.length + 1}
+                                                     giraffe={{
+                                                         id: giraffes.length + 1,
+                                                         aviary: aviary.id,
+                                                         name: '',
+                                                         image: '',
+                                                         gender: '',
+                                                         weight: '',
+                                                         growth: '',
+                                                         color: '',
+                                                         diet: '',
+                                                         character: ''
+                                                     }}/>
+                                        }
+                                        {filtederGiraffes.map((giraffe) =>
+                                            <GiraffeCard deleteFunction={() => deleteGiraffe(giraffe.id)}
+                                                         key={"giraffe-" + giraffe.id} giraffe={giraffe}/>
+                                        )}
+                                    </GiraffeList>
+                                </GiraffeWrapper>
+                                {visibleProgress &&
+                                <ProgressBlock percent={percent} title={'Заполнение вольера'} button={'Информация'}
+                                               handleClick={() => setIsVisibleUpdates(true)}
+                                               visibleFunction={() => setIsVisibleProgress(false)}/>
+                                }
+                                {visibleUpdates &&
+                                <Updates title={'Обновления'}
+                                         data={updates.filter(update => update.avairysId === aviary.id)}
+                                         visibleFunction={() => setIsVisibleUpdates(false) }/>
+                                }
+                            </div>
+                        </React.Fragment>
                     }
                 )}
             </div>
@@ -241,11 +254,10 @@ const mapStateToProps = (state) => {
     return {giraffes: state.giraffes, aviarys: state.aviarys, updates: state.updates};
 };
 
-const  mapDispatchToProps =(dispatch) => {
+const mapDispatchToProps = (dispatch) => {
     return {
         newAviary: e => dispatch(newAviary(e)),
-        deleteGiraffe: e => dispatch(deleteGiraffe(e)),
+        deleteGiraffe: e => dispatch(deleteGiraffe(e))
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(GiraffesScreen);
-

@@ -1,6 +1,4 @@
-import React, {useState} from 'react';
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap/dist/js/bootstrap.bundle.js';
+import React from 'react';
 import styled from '@emotion/styled';
 
 import { CloseIcon} from "@/client/main/utils/icons";
@@ -23,7 +21,6 @@ const ProgressWrapper = styled.div`
         right: 0;
     }
 `;
-
 const Close = styled.div`
     position: absolute;
     right: 16px;

@@ -1,4 +1,4 @@
-import {DELETE_GIRAFFE, EDIT_GIRAFFE, NEW_AVIARY} from "@/client/main/redux/actions";
+import {DELETE_GIRAFFE, EDIT_GIRAFFE, NEW_AVIARY, NEW_GIRAFFE} from "@/client/main/redux/actions";
 
 export const newAviary = (value) => {
     return {
@@ -19,5 +19,11 @@ export const editGiraffe = (value) => {
         type: EDIT_GIRAFFE,
         giraffe: value,
         id: value.id
+    }
+};
+export const newGiraffe = (value) => {
+    return {
+        type: NEW_GIRAFFE,
+        giraffe: value
     }
 };

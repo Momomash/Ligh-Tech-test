@@ -1,13 +1,9 @@
 import React, {useState} from 'react';
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap/dist/js/bootstrap.bundle.js';
 import styled from '@emotion/styled';
 import {css} from '@emotion/core';
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap/dist/js/bootstrap.bundle.js';
 import {connect} from "react-redux";
-import {editGiraffe} from '../redux/actionCreators';
-
+import noImage from '@/assets/image/no-image.jpg';
+import {newGiraffe, editGiraffe} from '../redux/actionCreators';
 import {
     MoreIcon,
     GenderIcon,
@@ -17,7 +13,7 @@ import {
     DeleteIcon
 } from '../utils/icons';
 
-const CardWrapper = styled.div`
+const CardWrapper = styled.form`
         display: flex;
         flex-direction: column;
         width: 236px;
@@ -32,7 +28,6 @@ const CardWrapper = styled.div`
             box-shadow: 0px 4px 15px #869CB0;
         }
 `;
-
 const ButtonDropdown = styled.div`
     float: right;
     svg{
@@ -76,7 +71,6 @@ const Img = css`
     background-repeat: no-repeat;
     background-size: cover;
 `;
-
 const Infographics = styled.div`
     display: flex;
     flex-direction: row;
@@ -96,14 +90,14 @@ const Specifications = styled.div`
     font-weight: bold;
     font-size: 16px;
     color: #333333;
-    input:first-child{
+    input:first-of-type{
         text-align: left;
     }
-    input:last-child{
+    input:last-of-type{
         text-align: right;
     }
 `;
-const Description = styled.p`
+const Description = styled.div`
     font-size: 15px;
     color: #000;
     padding-left: 12px;
@@ -153,7 +147,7 @@ const Input = styled.input`
         display: none;
     }
 `;
-const SaveButton = styled.div`
+const SaveButton = styled.button`
     max-width: 130px;
     margin: 0 auto;
     padding: 10px 24px;
@@ -163,41 +157,54 @@ const SaveButton = styled.div`
     text-align: center;
     background: #567354;
     border-radius: 33px;
+    border: none;
     &:hover{
         cursor: pointer;
-    }    
+    }  
+    &:focus{
+        outline: 0;
+    }  
+    &:disabled{
+        background-color: #B4B4B4;
+    }
 `;
-
 const getImageFromField = (input) => {
     return URL.createObjectURL(input.files[0]);
 };
-
 const GiraffeCard = (props) => {
     const [giraffe, setGiraffe] = useState(props.giraffe);
     const {id, name, image, gender, weight, growth, color, diet, character} = giraffe;
-    const [edited, setEdited] = useState(false);
-
+    const [edited, setEdited] = useState(props.isNewGiraffe);
     const FileLabel = styled.label`
         ${Img};
-        background-image: url(${image});
+        background-image: url(${image}), url(${noImage});
     `;
     return (
-        <CardWrapper className={edited ? 'boxshadow' : ''}>
+        <CardWrapper className={edited ? 'boxshadow' : ''} onSubmit={(e) => {
+            e.preventDefault();
+            if (props.isNewGiraffe) {
+                props.newGiraffe(giraffe);
+                props.deleteFunction();
+            } else {
+                props.editGiraffe(giraffe);
+            }
+            setEdited(false);
+        }}>
             <DropdownBlock className="dropdown">
                 <ButtonDropdown type="button" id="dropdownMenuButton"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     {MoreIcon}
                 </ButtonDropdown>
                 <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    {!props.isNewGiraffe &&
                     <span className="dropdown-item" onClick={() => setEdited(!edited)}>{EditIcon} Редактировать</span>
+                    }
                     <span className="dropdown-item" onClick={props.deleteFunction}>{DeleteIcon} Удалить</span>
                 </div>
             </DropdownBlock>
-            <>
-                <FileLabel htmlFor={'file-upload' + id} className="custom-file-upload"/>
-                <Input id={'file-upload' + id} disabled={!edited && 'disabled'} type="file" required name="giraffeImage"
-                       onChange={(e) => setGiraffe({...giraffe, image: getImageFromField(e.target)})}/>
-            </>
+            <FileLabel htmlFor={'file-upload' + id} className="custom-file-upload"/>
+            <Input id={'file-upload' + id} disabled={!edited && 'disabled'} type="file" name="giraffeImage"
+                   onChange={(e) => setGiraffe({...giraffe, image: getImageFromField(e.target)})}/>
             <InputName type="text" disabled={!edited && 'disabled'} name="giraffeName" required value={name}
                        onChange={(e) => setGiraffe({...giraffe, name: e.target.value})}/>
             <Infographics>
@@ -226,15 +233,13 @@ const GiraffeCard = (props) => {
                 </div>
                 <div>
                     <b>Характер: </b>
-                    <Input type="text" required disabled={!edited && 'disabled'} name="giraffeCharacter" value={character}
+                    <Input type="text" required disabled={!edited && 'disabled'} name="giraffeCharacter"
+                           value={character}
                            onChange={(e) => setGiraffe({...giraffe, character: e.target.value})}/>
                 </div>
             </Description>
             {edited &&
-            <SaveButton onClick={() => {
-                editGiraffe(giraffe);
-                setEdited(false);
-            }}> Сохранить </SaveButton>
+            <SaveButton disabled={!Object.keys(giraffe).every(key => giraffe[key])}>Сохранить</SaveButton>
             }
         </CardWrapper>
     )
@@ -243,6 +248,7 @@ const GiraffeCard = (props) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         editGiraffe: giraffe => dispatch(editGiraffe(giraffe)),
+        newGiraffe: giraffe => dispatch(newGiraffe(giraffe))
     };
 };
 export default connect(null, mapDispatchToProps)(GiraffeCard);

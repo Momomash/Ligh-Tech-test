@@ -13,8 +13,7 @@ import {
     HomeScreen
 } from '../screens'
 import {WrapperApp} from '../components/BaseComponents'
-import '../../../assets/css/style.css';
-
+import '@/assets/css/style.css';
 
 function App() {
     return (

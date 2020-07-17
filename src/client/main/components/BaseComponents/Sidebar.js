@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import styled from '@emotion/styled';
 import {NavLink} from "react-router-dom";
 import {HomeIcon, ControlIcon, GiraffesIcon, EmployeesIcon, SettingsIcon, SupportIcon, BurgerIcon} from '../../utils';
-import logo from '../../../../assets/image/logo.jpg';
+import logo from '@/assets/image/logo.jpg';
 
 const SidebarWrapper = styled.div`
     z-index: 3;
