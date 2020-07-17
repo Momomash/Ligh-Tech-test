@@ -1,0 +1,5 @@
+export const NEW_GIRAFFE = "NEW_GIRAFFE";
+export const EDIT_GIRAFFE = "EDIT_GIRAFFE";
+export const DELETE_GIRAFFE = "DELETE_GIRAFFE";
+export const NEW_AVIARY = "NEW_AVIARY";
+export const TRANSFER_GIRAFFE = "TRANSFER_GIRAFFE";

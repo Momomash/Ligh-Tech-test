@@ -1,8 +1,9 @@
 import React from 'react';
 import styled from "@emotion/styled";
-import { css } from '@emotion/core'
+import {connect} from "react-redux";
+import { css } from '@emotion/core';
 import {CloseIcon} from "@/client/main/utils/icons";
-import {giraffes, statuses} from "@/client/main/utils/giraffes";
+import {statuses} from "@/client/main/utils/constans";
 
 const UpdatesWrapper = styled.div`
     position: absolute;
@@ -58,7 +59,6 @@ const Table = styled.table`
      display: block; 
      }
     tbody {
-        height: 100px;      
         overflow-y: auto;   
         overflow-x: hidden;  
         
@@ -86,6 +86,12 @@ const Table = styled.table`
         padding: 7px 0;
         font-size: 12px;
         color: #435F40;
+    }
+    @media screen and (max-width: 450px){
+        td{
+            font-size: 9px;
+            word-wrap: break-word;
+        }
     }
 `;
 const colorTag = css`
@@ -120,7 +126,8 @@ const statusColor = {
 };
 
 
-export const Updates = (props) => {
+const Updates = (props) => {
+    const {giraffes} = props;
     return (
         <UpdatesWrapper >
             <Close onClick={props.visibleFunction}>
@@ -136,8 +143,8 @@ export const Updates = (props) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {props.data.map((data) =>
-                            <tr key={"dataRow-" + data.giraffeId}>
+                    {props.data.map((data, i) =>
+                            <tr key={"dataRow-" + i}>
                                 <td>{data.date}</td>
                                 <td>{data.action}</td>
                                 <td>{giraffes.find(item => item.id === data.giraffeId).name}</td>
@@ -149,3 +156,9 @@ export const Updates = (props) => {
         </UpdatesWrapper>
     )
 };
+
+const  mapStateToProps = (state) => {
+  return { giraffes: state.giraffes};
+};
+
+export default connect(mapStateToProps)(Updates);

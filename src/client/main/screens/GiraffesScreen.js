@@ -2,17 +2,16 @@ import React, {useState} from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.bundle.js';
 import styled from '@emotion/styled';
+import {connect} from "react-redux";
 
 import logo from '../../../assets/image/logo.jpg';
-import {giraffes, aviarys, updates, configuration} from '../utils/giraffes';
+import {configuration} from '../utils/constans';
 import {NoticeIcon, PlusIcon} from '../utils/icons';
-import {GiraffeCard} from '../components/GiraffeCard';
+import GiraffeCard from '../components/GiraffeCard';
 import {ProgressBlock} from '../components/ProgressBlock';
-import {Updates} from '../components/Updates';
+import Updates from '../components/Updates';
+import {newAviary, deleteGiraffe} from '../redux/actionCreators';
 
-const Header = styled.div`
-    
-`;
 const Tabs = styled.ul`
      border-bottom: 3px solid #D9D9D9 !important;
      padding-bottom: 7px;
@@ -100,16 +99,19 @@ const AddAviary = styled.button`
     border-radius: 50%;
     border: none;
     background-color: #D9D9D9;
-    &:hover{
-        cursor: pointer;
-        background-color: #bfbdbd;
-        transition-duration: 0.4s;
-    }
+        &:hover{
+            cursor: pointer;
+            background-color: #bfbdbd;
+            transition-duration: 0.4s;
+        }
+        &:focus{
+            outline: 0;
+            border: none;
+        }
         svg{
             fill: #fff;
             width: 10px;
-            height: 10px;
-            
+            height: 10px;  
         }
     @media screen and (max-width: 450px){
         position: absolute;
@@ -125,7 +127,7 @@ const Title = styled.div`
     font-weight: bold;
     font-size: 32px;
     color: #567354;
-    margin: 35px 0 26px 0;  
+    margin-top: 35px;  
 `;
 const AddGiraffe = styled.button`
     display: flex;
@@ -137,11 +139,15 @@ const AddGiraffe = styled.button`
     border-radius: 50%;
     border: none;
     background-color: #668663;
-    &:hover{
-        cursor: pointer;
-        background-color: #567354;
-        transition-duration: 0.4s;
-    }
+        &:hover{
+            cursor: pointer;
+            background-color: #567354;
+            transition-duration: 0.4s;
+        }
+        :focus{
+            outline: 0;
+            border: none;
+        }
         svg{
             fill: #fff;
             width: 16px;
@@ -160,9 +166,11 @@ const GiraffeList = styled.div`
     flex-direction: row;
     justify-content: flex-start;
     max-width: 3000px;
+    padding: 20px 0;
 `;
 
-export const GiraffesScreen = () => {
+export const GiraffesScreen = (props) => {
+    const {giraffes, aviarys, updates, newAviary, deleteGiraffe} = props;
     const tableField = [
         {name: 'Дата', key: 'date'},
         {name: 'Действие', key: 'action'},
@@ -172,8 +180,8 @@ export const GiraffesScreen = () => {
     const [visibleUpdates, setIsVisibleUpdates] = useState(false);
     const [visibleProgress, setIsVisibleProgress] = useState(true);
     return (
-        <div>
-            <Header>
+        <>
+            <div>
                 <Tabs className="nav nav-tabs" id="myTab" role="tablist">
                     {aviarys.map((aviary, i) => <li className="nav-item" role="presentation" key={aviary.id}>
                             <a className={"nav-link" + (i === 0 ? ' active' : '')} id={"link-" + aviary.id}
@@ -181,7 +189,7 @@ export const GiraffesScreen = () => {
                                role="tab" aria-controls={"#nav-" + aviary.id} aria-selected="false">Вольер {aviary.id}</a>
                         </li>
                     )}
-                    <AddAviary>
+                    <AddAviary onClick={() => newAviary(aviarys.length + 1)}>
                         {PlusIcon}
                     </AddAviary>
                     <UserDiv>
@@ -190,9 +198,8 @@ export const GiraffesScreen = () => {
                         <div className="email">hello@giraffe.com</div>
                     </UserDiv>
                 </Tabs>
-            </Header>
-
-            <Title>Жирафы <AddGiraffe>{PlusIcon}</AddGiraffe></Title>
+            </div>
+            <Title>Жирафы <AddGiraffe >{PlusIcon}</AddGiraffe></Title>
             <div className="tab-content" id="myTabContent">
                 {aviarys.map((aviary, i) => {
                         const filtederGiraffes = giraffes.filter(giraffe => giraffe.aviary === aviary.id);
@@ -203,8 +210,8 @@ export const GiraffesScreen = () => {
                                     role="tabpanel" aria-labelledby={"link-" + aviary.id}>
                             <GiraffeWrapper>
                                 <GiraffeList>
-                                    {filtederGiraffes.map((giraffe, i) =>
-                                        <GiraffeCard key={"giraffe-" + giraffe.id} giraffe={giraffe}/>
+                                    {filtederGiraffes.map((giraffe) =>
+                                        <GiraffeCard deleteFunction={() => deleteGiraffe(giraffe.id)} key={"giraffe-" + giraffe.id} giraffe={giraffe}/>
                                     )}
                                 </GiraffeList>
                             </GiraffeWrapper>
@@ -226,8 +233,19 @@ export const GiraffesScreen = () => {
                     }
                 )}
             </div>
-        </div>
+        </>
     )
 };
 
-export default GiraffesScreen;
+const mapStateToProps = (state) => {
+    return {giraffes: state.giraffes, aviarys: state.aviarys, updates: state.updates};
+};
+
+const  mapDispatchToProps =(dispatch) => {
+    return {
+        newAviary: e => dispatch(newAviary(e)),
+        deleteGiraffe: e => dispatch(deleteGiraffe(e)),
+    };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(GiraffesScreen);
+
